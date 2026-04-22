@@ -4,7 +4,8 @@ from bs4 import BeautifulSoup
 
 app = FastAPI()
 
-def get_lao_lotto():
+@app.get("/")
+def read_latest():
     url = "https://www.sanook.com/news/laolotto/"
     headers = {"User-Agent": "Mozilla/5.0"}
     try:
@@ -17,6 +18,7 @@ def get_lao_lotto():
             return {"status": "error", "message": "Content not found"}
             
         date_text = item.find('h2', class_='lotto-check__title').text.strip()
+        # ดึงเลขรางวัลทั้งหมดที่มีในหน้านั้น
         numbers = [n.text.strip() for n in item.find_all('strong', class_='lotto-check__res-number')]
 
         return {
@@ -36,9 +38,3 @@ def get_lao_lotto():
         }
     except Exception as e:
         return {"status": "error", "message": str(e)}
-
-# เปลี่ยนจาก @app.get("/api/latest") เป็น @app.get("/") 
-# เพื่อให้เมื่อเข้าผ่าน /api/index (หรือที่เรา rewrite ไว้) มันจะรันตัวนี้ทันที
-@app.get("/api/latest")
-def read_latest():
-    return get_lao_lotto()
