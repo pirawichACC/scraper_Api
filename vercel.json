@@ -1,6 +1,0 @@
-{
-  "rewrites": [
-    { "source": "/latest", "destination": "/" },
-    { "source": "/(.*)", "destination": "/" }
-  ]
-}
